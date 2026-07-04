@@ -1,0 +1,60 @@
+<div class="page">
+  <button class="back" (click)="back()">→ بازگشت</button>
+
+  @if (svc.selected(); as tx) {
+    <div class="card">
+      <div class="card__head">
+        <h2>{{ tx.description }}</h2>
+        <span class="badge" [ngClass]="(tx.status | statusBadge).cssClass">{{ (tx.status | statusBadge).label }}</span>
+      </div>
+
+      <div class="grid">
+        <div class="item">
+          <span class="item__label">مرجع</span>
+          <span class="item__val mono">{{ tx.reference }}</span>
+        </div>
+        <div class="item">
+          <span class="item__label">شناسه تراکنش</span>
+          <span class="item__val mono">{{ tx.id }}</span>
+        </div>
+        <div class="item">
+          <span class="item__label">تاریخ و ساعت</span>
+          <span class="item__val">{{ formatJalaliFull(tx.date) }}</span>
+        </div>
+        <div class="item">
+          <span class="item__label">فروشگاه</span>
+          <span class="item__val">{{ tx.merchant }}</span>
+        </div>
+        <div class="item">
+          <span class="item__label">دسته‌بندی</span>
+          <span class="item__val">{{ tx.category | categoryLabel }}</span>
+        </div>
+        <div class="item">
+          <span class="item__label">نوع</span>
+          <span class="item__val" [class.credit]="tx.type==='credit'" [class.debit]="tx.type==='debit'">
+            {{ tx.type === 'credit' ? 'واریز' : 'برداشت' }}
+          </span>
+        </div>
+        <div class="item full">
+          <span class="item__label">مبلغ</span>
+          <span class="item__val big" [class.credit]="tx.type==='credit'" [class.debit]="tx.type==='debit'">
+            {{ tx.type === 'credit' ? '+' : '−' }} {{ tx.amount | rial }}
+          </span>
+        </div>
+      </div>
+
+      @if (tx.status === 'pending') {
+        <div class="actions">
+          <button class="btn success" [disabled]="svc.loading()" (click)="approve(tx.id)">
+            ✓ تأیید تراکنش
+          </button>
+          <button class="btn danger" [disabled]="svc.loading()" (click)="flag(tx.id)">
+            ✗ علامت‌گذاری به عنوان ناموفق
+          </button>
+        </div>
+      }
+    </div>
+  } @else {
+    <p class="empty">تراکنش یافت نشد.</p>
+  }
+</div>

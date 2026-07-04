@@ -1,0 +1,12 @@
+.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+.card { display:flex; align-items:center; gap:1rem; padding:1.25rem 1.5rem; border-radius:12px; border-right:4px solid transparent; background:var(--surface); }
+.card__icon { font-size:1.5rem; width:2.5rem; text-align:center; opacity:.7; }
+.card__body { display:flex; flex-direction:column; gap:.15rem; }
+.card__label { font-size:.7rem; font-weight:700; letter-spacing:.02em; color:var(--muted); }
+.card__value { font-size:1.35rem; font-weight:700; }
+.card__sub   { font-size:.72rem; color:var(--muted); }
+.neg { color:var(--danger) !important; }
+.green  { border-color:var(--success); } .green  .card__value { color:var(--success); }
+.red    { border-color:var(--danger);  } .red    .card__value { color:var(--danger);  }
+.blue   { border-color:var(--primary); } .blue   .card__value { color:var(--primary); }
+.yellow { border-color:var(--warning); } .yellow .card__value { color:var(--warning); }

@@ -1,0 +1,32 @@
+.tbl-wrap { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+table { width:100%; border-collapse:collapse; font-size:.875rem; }
+th { padding:.7rem 1rem; text-align:right; font-size:.68rem; font-weight:700; letter-spacing:.02em; color:var(--muted); background:var(--bg); border-bottom:1px solid var(--border); }
+td { padding:.75rem 1rem; vertical-align:middle; white-space:nowrap; border-bottom:1px solid var(--border); }
+.tbl-row { cursor:pointer; transition:background .1s; }
+.tbl-row:hover td { background:var(--hover); }
+.tbl-row:last-child td { border-bottom:none; }
+.right { text-align:right; }
+.mono  { font-family:'Courier New',monospace; }
+.small { font-size:.8rem; }
+.empty { text-align:center; padding:3rem !important; color:var(--muted); }
+.chip { display:inline-block; padding:.18rem .55rem; border-radius:20px; font-size:.68rem; font-weight:600; background:var(--info-bg); color:var(--info); }
+.type-badge { font-size:.75rem; font-weight:600; }
+.type-badge.credit { color:var(--success); }
+.type-badge.debit  { color:var(--danger); }
+.credit { color:var(--success); }
+.debit  { color:var(--danger); }
+.badge { display:inline-block; padding:.18rem .55rem; border-radius:20px; font-size:.68rem; font-weight:600; }
+.badge--success { background:var(--success-bg); color:var(--success); }
+.badge--warning { background:var(--warning-bg); color:var(--warning); }
+.badge--danger  { background:var(--danger-bg);  color:var(--danger);  }
+.badge--info    { background:var(--info-bg);     color:var(--info);    }
+.act { padding:.2rem .5rem; border-radius:5px; font-size:.75rem; font-weight:700; cursor:pointer; border:1px solid; margin-left:.25rem; }
+.act:disabled { opacity:.4; cursor:not-allowed; }
+.approve { background:var(--success-bg); color:var(--success); border-color:var(--success); }
+.flag    { background:var(--danger-bg);  color:var(--danger);  border-color:var(--danger);  }
+.pager { display:flex; align-items:center; justify-content:space-between; padding:.7rem 1rem; border-top:1px solid var(--border); flex-wrap:wrap; gap:.5rem; }
+.pager__info { font-size:.8rem; color:var(--muted); }
+.pager__btns { display:flex; gap:.25rem; }
+.pager__btns button { min-width:2rem; height:2rem; border:1px solid var(--border); border-radius:6px; background:transparent; color:var(--text); font-size:.8rem; cursor:pointer; }
+.pager__btns button:disabled { opacity:.4; cursor:not-allowed; }
+.pager__btns button.active { background:var(--primary); color:#fff; border-color:var(--primary); }

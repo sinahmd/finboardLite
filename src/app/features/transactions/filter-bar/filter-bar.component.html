@@ -1,0 +1,60 @@
+<div class="filter-bar">
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="field grow">
+        <label>جستجو</label>
+        <input formControlName="search" type="search" placeholder="توضیحات یا شماره مرجع..." />
+      </div>
+      <div class="field">
+        <label>وضعیت</label>
+        <select formControlName="status">
+          <option value="all">همه وضعیت‌ها</option>
+          <option value="completed">تکمیل شده</option>
+          <option value="pending">در انتظار</option>
+          <option value="failed">ناموفق</option>
+          <option value="refunded">بازپرداخت شده</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>دسته‌بندی</label>
+        <select formControlName="category">
+          <option value="all">همه دسته‌بندی‌ها</option>
+          <option value="purchase">خرید</option>
+          <option value="transfer">انتقال</option>
+          <option value="withdrawal">برداشت</option>
+          <option value="deposit">واریز</option>
+          <option value="fee">کارمزد</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>نوع</label>
+        <select formControlName="type">
+          <option value="all">همه انواع</option>
+          <option value="credit">واریز</option>
+          <option value="debit">برداشت</option>
+        </select>
+      </div>
+      <button type="button" class="reset-btn" (click)="reset()">بازنشانی</button>
+    </div>
+
+    <div class="row secondary">
+      <div class="field">
+        <label>از تاریخ</label>
+        <app-jalali-datepicker formControlName="dateFrom" placeholder="تاریخ شروع" />
+      </div>
+      <div class="field">
+        <label>تا تاریخ</label>
+        <app-jalali-datepicker formControlName="dateTo" placeholder="تاریخ پایان" />
+      </div>
+      <div class="field">
+        <label>مبلغ حداقل (﷼)</label>
+        <input formControlName="amountMin" type="number" placeholder="0" min="0" />
+      </div>
+      <div class="field">
+        <label>مبلغ حداکثر (﷼)</label>
+        <input formControlName="amountMax" type="number" placeholder="بدون محدودیت" min="0" />
+      </div>
+      <span class="count">{{ svc.filtered().length | persianNumber }} نتیجه</span>
+    </div>
+  </form>
+</div>

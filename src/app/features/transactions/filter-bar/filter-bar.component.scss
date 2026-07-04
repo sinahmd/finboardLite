@@ -1,0 +1,11 @@
+.filter-bar { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1rem 1.25rem; margin-bottom:1.25rem; }
+.row { display:flex; flex-wrap:wrap; gap:.75rem; align-items:flex-end; }
+.row.secondary { margin-top:.75rem; padding-top:.75rem; border-top:1px solid var(--border); }
+.field { display:flex; flex-direction:column; gap:.3rem; min-width:130px; }
+.field.grow { flex:1; min-width:200px; }
+label { font-size:.7rem; font-weight:700; letter-spacing:.02em; color:var(--muted); }
+input, select { padding:.45rem .75rem; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); font-size:.875rem; outline:none; transition:border-color .15s; font-family:inherit; }
+input:focus, select:focus { border-color:var(--primary); }
+.reset-btn { padding:.45rem 1rem; border:1px solid var(--border); border-radius:8px; background:transparent; color:var(--muted); font-size:.875rem; cursor:pointer; align-self:flex-end; transition:all .15s; font-family:inherit; }
+.reset-btn:hover { background:var(--danger-bg); border-color:var(--danger); color:var(--danger); }
+.count { margin-right:auto; font-size:.8rem; color:var(--muted); align-self:center; }

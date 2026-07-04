@@ -1,0 +1,27 @@
+.page { max-width:720px; margin:0 auto; padding:1.5rem 2rem; }
+.back { background:none; border:none; color:var(--primary); font-size:.875rem; cursor:pointer; padding:0; margin-bottom:1.5rem; display:block; font-family:inherit; }
+.back:hover { text-decoration:underline; }
+.card { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+.card__head { display:flex; align-items:center; justify-content:space-between; padding:1.25rem 1.5rem; border-bottom:1px solid var(--border); }
+.card__head h2 { font-size:1.05rem; font-weight:700; margin:0; }
+.grid { display:grid; grid-template-columns:1fr 1fr; }
+.item { padding:1rem 1.5rem; border-bottom:1px solid var(--border); display:flex; flex-direction:column; gap:.25rem; }
+.item:nth-child(odd) { border-left:1px solid var(--border); }
+.item.full { grid-column:1/-1; }
+.item__label { font-size:.68rem; font-weight:700; letter-spacing:.02em; color:var(--muted); }
+.item__val { font-size:.9rem; font-weight:500; }
+.item__val.big { font-size:1.75rem; font-weight:700; }
+.mono { font-family:'Courier New',monospace; font-size:.85rem; }
+.credit { color:var(--success); }
+.debit  { color:var(--danger); }
+.badge { display:inline-block; padding:.25rem .75rem; border-radius:20px; font-size:.72rem; font-weight:600; }
+.badge--success { background:var(--success-bg); color:var(--success); }
+.badge--warning { background:var(--warning-bg); color:var(--warning); }
+.badge--danger  { background:var(--danger-bg);  color:var(--danger); }
+.badge--info    { background:var(--info-bg);     color:var(--info); }
+.actions { display:flex; gap:.75rem; padding:1.25rem 1.5rem; border-top:1px solid var(--border); background:var(--bg); }
+.btn { padding:.6rem 1.25rem; border-radius:8px; font-size:.875rem; font-weight:600; cursor:pointer; border:none; transition:opacity .15s; font-family:inherit; }
+.btn:disabled { opacity:.5; cursor:not-allowed; }
+.btn.success { background:var(--success); color:#fff; }
+.btn.danger  { background:var(--danger);  color:#fff; }
+.empty { text-align:center; color:var(--muted); padding:3rem; }

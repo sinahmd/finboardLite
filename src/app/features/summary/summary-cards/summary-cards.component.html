@@ -1,0 +1,36 @@
+<div class="cards">
+  <div class="card green">
+    <div class="card__icon">↑</div>
+    <div class="card__body">
+      <span class="card__label">مجموع واریزی</span>
+      <span class="card__value" [title]="svc.summary().totalIn | rial">{{ svc.summary().totalIn | rial:true }}</span>
+      <span class="card__sub">واریزی‌های تکمیل شده</span>
+    </div>
+  </div>
+  <div class="card red">
+    <div class="card__icon">↓</div>
+    <div class="card__body">
+      <span class="card__label">مجموع برداشتی</span>
+      <span class="card__value" [title]="svc.summary().totalOut | rial">{{ svc.summary().totalOut | rial:true }}</span>
+      <span class="card__sub">برداشت‌های تکمیل شده</span>
+    </div>
+  </div>
+  <div class="card blue">
+    <div class="card__icon">≈</div>
+    <div class="card__body">
+      <span class="card__label">مانده خالص</span>
+      <span class="card__value" [class.neg]="svc.summary().net < 0" [title]="svc.summary().net | rial">
+        {{ svc.summary().net | rial:true }}
+      </span>
+      <span class="card__sub">{{ svc.summary().count | persianNumber }} تراکنش نمایش داده شده</span>
+    </div>
+  </div>
+  <div class="card yellow">
+    <div class="card__icon">⏳</div>
+    <div class="card__body">
+      <span class="card__label">در انتظار</span>
+      <span class="card__value">{{ svc.summary().pending | persianNumber }}</span>
+      <span class="card__sub">{{ svc.summary().failed | persianNumber }} ناموفق</span>
+    </div>
+  </div>
+</div>

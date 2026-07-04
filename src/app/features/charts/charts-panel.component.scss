@@ -1,0 +1,12 @@
+.charts-panel { margin-bottom: 1.5rem; }
+.charts-panel__header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1rem; }
+.charts-panel__header h2 { font-size: 1.1rem; font-weight: 700; }
+.charts-panel__sub { font-size: .8rem; color: var(--muted); }
+.charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } }
+.chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.chart-card__head { padding: .9rem 1.25rem .5rem; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: .15rem; }
+.chart-card__title { font-size: .875rem; font-weight: 700; }
+.chart-card__sub { font-size: .7rem; color: var(--muted); }
+.chart-card__body { padding: 1rem 1.25rem 1.25rem; position: relative; height: 240px; overflow-y: auto; }
+.chart-card__body--donut { height: 260px; }

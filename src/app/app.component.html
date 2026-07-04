@@ -1,0 +1,11 @@
+<div class="app" [attr.data-theme]="theme.mode()">
+  <nav class="nav">
+    <span class="nav__brand">💳 فین‌بورد</span>
+    <button class="nav__toggle" (click)="theme.toggle()" [title]="theme.isDark() ? 'تغییر به حالت روشن' : 'تغییر به حالت تاریک'">
+      {{ theme.isDark() ? '☀️' : '🌙' }}
+    </button>
+  </nav>
+  <main>
+    <router-outlet />
+  </main>
+</div>

@@ -1,0 +1,48 @@
+<div class="charts-panel">
+  <div class="charts-panel__header">
+    <h2>تحلیل و آمار</h2>
+    <span class="charts-panel__sub">بر اساس تراکنش‌های فیلتر شده</span>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-card chart-card--wide">
+      <div class="chart-card__head">
+        <span class="chart-card__title">جریان نقدی روزانه</span>
+        <span class="chart-card__sub">واریزی در مقابل برداشت — ۳۰ روز اخیر</span>
+      </div>
+      <div class="chart-card__body">
+        <app-cash-flow-chart />
+      </div>
+    </div>
+
+    <div class="chart-card chart-card--wide">
+      <div class="chart-card__head">
+        <span class="chart-card__title">حجم ماهانه</span>
+        <span class="chart-card__sub">واریز در مقابل برداشت — ۱۲ ماه اخیر</span>
+      </div>
+      <div class="chart-card__body">
+        <app-monthly-volume-chart />
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-card__head">
+        <span class="chart-card__title">هزینه بر اساس دسته‌بندی</span>
+        <span class="chart-card__sub">فقط برداشت‌های تکمیل شده</span>
+      </div>
+      <div class="chart-card__body chart-card__body--donut">
+        <app-category-donut-chart />
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-card__head">
+        <span class="chart-card__title">وضعیت تراکنش‌ها</span>
+        <span class="chart-card__sub">توزیع در میان تمام تراکنش‌های فیلتر شده</span>
+      </div>
+      <div class="chart-card__body">
+        <app-status-bar-chart />
+      </div>
+    </div>
+  </div>
+</div>
