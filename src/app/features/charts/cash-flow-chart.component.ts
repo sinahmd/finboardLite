@@ -7,11 +7,10 @@ import { chartPalette, formatCompactRial, axisTooltipFormatter } from './chart-t
 
 @Component({
   selector: 'app-cash-flow-chart',
-  standalone: true,
   imports: [NgxEchartsDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './cash-flow-chart.component.html',
-  styleUrls: ['./cash-flow-chart.component.scss'],
+  styleUrl: './cash-flow-chart.component.scss',
 })
 export class CashFlowChartComponent {
   private readonly data = inject(ChartDataService);

@@ -7,11 +7,10 @@ import { chartPalette, itemTooltipFormatter } from './chart-theme';
 
 @Component({
   selector: 'app-category-donut-chart',
-  standalone: true,
   imports: [NgxEchartsDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './category-donut-chart.component.html',
-  styleUrls: ['./category-donut-chart.component.scss'],
+  styleUrl: './category-donut-chart.component.scss',
 })
 export class CategoryDonutChartComponent {
   private readonly data = inject(ChartDataService);

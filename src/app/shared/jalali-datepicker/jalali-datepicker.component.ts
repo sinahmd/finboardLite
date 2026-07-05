@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import moment from 'jalali-moment';
 import { JALALI_MONTHS, JALALI_WEEKDAYS } from '../utils/jalali';
@@ -15,8 +14,6 @@ interface CalendarDay {
 
 @Component({
   selector: 'app-jalali-datepicker',
-  standalone: true,
-  imports: [CommonModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule, TitleCasePipe } from '@angular/common';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { RialPipe } from '../../../shared/pipes/rial.pipe';
@@ -9,10 +9,9 @@ import { formatJalaliDateTimeFull } from '../../../shared/utils/jalali';
 
 @Component({
   selector: 'app-transaction-detail',
-  standalone: true,
-  imports: [CommonModule, TitleCasePipe, RialPipe, StatusBadgePipe, CategoryLabelPipe],
+  imports: [RialPipe, StatusBadgePipe, CategoryLabelPipe],
   templateUrl: './transaction-detail.component.html',
-  styleUrls: ['./transaction-detail.component.scss'],
+  styleUrl: './transaction-detail.component.scss',
 })
 export class TransactionDetailComponent {
   svc = inject(TransactionService);

@@ -8,11 +8,10 @@ import { toPersianNumber } from '../../shared/utils/persian-number';
 
 @Component({
   selector: 'app-status-bar-chart',
-  standalone: true,
   imports: [NgxEchartsDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './status-bar-chart.component.html',
-  styleUrls: ['./status-bar-chart.component.scss'],
+  styleUrl: './status-bar-chart.component.scss',
 })
 export class StatusBarChartComponent {
   private readonly data = inject(ChartDataService);

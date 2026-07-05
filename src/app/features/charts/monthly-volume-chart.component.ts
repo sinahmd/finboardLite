@@ -7,11 +7,10 @@ import { chartPalette, formatCompactRial, axisTooltipFormatter } from './chart-t
 
 @Component({
   selector: 'app-monthly-volume-chart',
-  standalone: true,
   imports: [NgxEchartsDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './monthly-volume-chart.component.html',
-  styleUrls: ['./monthly-volume-chart.component.scss'],
+  styleUrl: './monthly-volume-chart.component.scss',
 })
 export class MonthlyVolumeChartComponent {
   private readonly data = inject(ChartDataService);

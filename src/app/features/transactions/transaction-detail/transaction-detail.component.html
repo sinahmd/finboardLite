@@ -5,7 +5,7 @@
     <div class="card">
       <div class="card__head">
         <h2>{{ tx.description }}</h2>
-        <span class="badge" [ngClass]="(tx.status | statusBadge).cssClass">{{ (tx.status | statusBadge).label }}</span>
+        <span class="badge" [class]="(tx.status | statusBadge).cssClass">{{ (tx.status | statusBadge).label }}</span>
       </div>
 
       <div class="grid">

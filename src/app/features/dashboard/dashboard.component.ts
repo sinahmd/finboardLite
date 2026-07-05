@@ -6,10 +6,9 @@ import { ChartsPanelComponent } from '../charts/charts-panel.component';
 
 @Component({
   selector: 'app-dashboard',
-  standalone: true,
   imports: [SummaryCardsComponent, FilterBarComponent, TransactionTableComponent, ChartsPanelComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
+  styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {}

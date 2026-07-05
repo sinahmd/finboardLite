@@ -6,7 +6,6 @@ import { StatusBarChartComponent } from './status-bar-chart.component';
 
 @Component({
   selector: 'app-charts-panel',
-  standalone: true,
   imports: [
     CashFlowChartComponent,
     MonthlyVolumeChartComponent,
@@ -15,6 +14,6 @@ import { StatusBarChartComponent } from './status-bar-chart.component';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './charts-panel.component.html',
-  styleUrls: ['./charts-panel.component.scss'],
+  styleUrl: './charts-panel.component.scss',
 })
 export class ChartsPanelComponent {}

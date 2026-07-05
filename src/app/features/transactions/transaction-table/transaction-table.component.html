@@ -31,7 +31,7 @@
             {{ tx.amount | rial }}
           </td>
           <td>
-              <span class="badge" [ngClass]="(tx.status | statusBadge).cssClass">{{ (tx.status | statusBadge).label }}</span>
+              <span class="badge" [class]="(tx.status | statusBadge).cssClass">{{ (tx.status | statusBadge).label }}</span>
           </td>
           <td (click)="$event.stopPropagation()">
             @if (tx.status === 'pending') {
