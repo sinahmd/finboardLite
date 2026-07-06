@@ -1,0 +1,12 @@
+
+{
+  "/api/market-rate": {
+    "target": "https://dskdbfnrgwtshglvekul.supabase.co/functions/v1/market-rate",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/market-rate": ""
+    },
+    "logLevel": "debug"
+  }
+}
