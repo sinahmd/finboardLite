@@ -1,85 +1,98 @@
-# FinBoard – Angular 17 Transaction Dashboard
+# فین‌بورد (FinBoard)
 
-A modern fintech dashboard built with Angular 17, featuring Farsi/RTL UI, Jalali (Solar Hijri) calendar, and comprehensive unit tests.
-
-## Quick Start
-
-```bash
-npm install
-ng serve
-# open http://localhost:4200
-```
+داشبورد مدیریت تراکنش‌های مالی با نمودارهای تعاملی و نرخ لحظه‌ای ارز
 
 ## Features
 
-- **Farsi/RTL UI** — Full Persian interface with Vazirmatn font
-- **Jalali Calendar** — Solar Hijri dates with interactive datepicker
-- **200 mock transactions** — Realistic Iranian fintech merchants and Rial currency
-- **Signals-based state** — `signal()` / `computed()` — no NgRx
-- **Reactive Forms** — Search with debounce, instant filters on dropdowns
-- **Optimistic UI** — Approve/flag actions with loading state
-- **Lazy-loaded routes** — Dashboard + detail page as separate chunks
-- **Light/dark theme** — CSS custom properties with one-click toggle
-- **ECharts analytics** — Daily cash flow, monthly volume, category donut, status bar
-- **63 unit tests** — Services, pipes, utilities, and all components
-- **OnPush change detection** — Applied to signal-driven components
-
-## Architecture
-
-```
-src/app/
-├── core/
-│   ├── data/          # Mock transaction generator
-│   ├── models/        # TypeScript interfaces
-│   └── services/      # TransactionService (signals), ThemeService
-├── features/
-│   ├── dashboard/     # Main page layout
-│   ├── summary/       # KPI cards
-│   ├── transactions/  # Filter bar, table, detail page
-│   └── charts/        # 4 ECharts visualizations
-└── shared/
-    ├── pipes/         # RialPipe, StatusBadgePipe, CategoryLabelPipe
-    ├── jalali-datepicker/  # Custom Solar calendar component
-    └── utils/         # Jalali date conversion utilities
-```
+- 📊 Interactive ECharts dashboard (cash flow, monthly volume, category breakdown, status)
+- 🔍 Advanced transaction filtering with Jalali date picker
+- 💱 Live USD/IRR market rate widget (via pricedb API)
+- 🌓 Dark/Light theme toggle
+- 📱 Responsive RTL layout
+- 💾 Supabase backend (optional — runs in MOCK_MODE by default)
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | Angular 17 (standalone components) |
-| State | Angular Signals |
-| Styling | SCSS, CSS custom properties |
-| Charts | ECharts + ngx-echarts |
-| Dates | moment + jalali-moment |
-| Testing | Jasmine + Karma |
-| Deploy | Vercel |
+- Angular 21 (standalone components, signals, OnPush)
+- ECharts (tree-shaken)
+- jalali-moment for Persian dates
+- Supabase (optional — runs in MOCK_MODE by default)
 
-## Testing
+## Quick Start (Offline Mode)
 
 ```bash
-# Run all tests
-ng test
-
-# Run in headless Chrome
-ng test --watch=false --browsers=ChromeHeadless
-
-# Build
-ng build
+npm install
+npm start
 ```
 
-## Deploy to Vercel
+The app runs fully offline with 200 mock transactions by default.
+
+## Supabase Setup (Optional)
+
+To use real persisted data:
+
+### 1. Create a Free Supabase Project
+
+1. Go to [supabase.com](https://supabase.com) and sign up
+2. Create a new project
+3. Note your **Project URL** and **anon public key** from Settings > API
+
+### 2. Run the Migration
+
+1. Go to SQL Editor in Supabase dashboard
+2. Copy contents of `supabase/migrations/001_create_transactions.sql`
+3. Run the SQL
+4. Copy contents of `supabase/migrations/002_seed_transactions.sql`
+5. Run the SQL to seed demo transactions
+
+### 3. Configure Environment
+
+Create `src/environments/environment.ts` (or update existing):
+
+```typescript
+export const environment = {
+  production: false,
+  mockMode: false,  // Set to false to use Supabase
+  supabaseUrl: 'https://YOUR-PROJECT.supabase.co',
+  supabaseAnonKey: 'YOUR-ANON-KEY',
+};
+```
+
+### 4. Vercel Deployment
+
+Set these environment variables in your Vercel project settings:
+
+```
+SUPABASE_URL=https://YOUR-PROJECT.supabase.co
+SUPABASE_ANON_KEY=YOUR-ANON-KEY
+```
+
+## Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `mockMode` | Run offline with mock data | No (defaults to true) |
+| `supabaseUrl` | Supabase project URL | Only if mockMode=false |
+| `supabaseAnonKey` | Supabase public anon key | Only if mockMode=false |
+
+**Security Note**: Only the public anon key should be in environment files. Never commit the service-role key.
+
+## Row Level Security
+
+The transactions table has RLS enabled with policies that allow:
+- Authenticated users to access their own rows (`owner_id = auth.uid()`)
+- Anonymous/demo access to rows with null owner (`owner_id IS NULL`)
+
+This is designed for future multi-tenant use. When Supabase Auth is added, the policy will be tightened to require authentication.
+
+## Development
 
 ```bash
-npx vercel --prod
+npm start          # Start dev server
+npm test           # Run tests
+npm run build      # Production build
 ```
 
-## Interview Talking Points
+## License
 
-- **Signals vs NgRx**: State is local and non-shared — signals give fine-grained reactivity with zero boilerplate
-- **OnPush**: Applied to pure display components (summary cards, charts) for optimal rendering
-- **Debounce only on search**: Dropdowns are O(1) re-renders; text search benefits from coalescing keystrokes
-- **Optimistic UI**: Signal updates before simulated API resolves — in production you'd roll back on error
-- **Lazy routes**: Each feature is its own JS chunk for fast initial load
-- **Jalali calendar**: Custom datepicker using jalali-moment for Persian date support
-- **RTL layout**: Full right-to-left support with proper CSS logical properties
+MIT
