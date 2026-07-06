@@ -1,24 +1,52 @@
-import { Injectable, Signal, computed, signal } from '@angular/core';
+// src/app/core/services/transaction.service.ts
+import { Injectable, Signal, computed, signal, inject, resource } from '@angular/core';
 import { MOCK_TRANSACTIONS } from '../data/mock-transactions';
 import { DEFAULT_FILTER, Transaction, TransactionFilter } from '../models/transaction.model';
+import { SupabaseClientService } from './supabase-client.service';
+import { ToastService } from './toast.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class TransactionService {
-  private readonly _all     = signal<Transaction[]>(MOCK_TRANSACTIONS);
+  private readonly supabase = inject(SupabaseClientService);
+  private readonly toast = inject(ToastService);
+
   private readonly _filter  = signal<TransactionFilter>({ ...DEFAULT_FILTER });
   private readonly _selId   = signal<string | null>(null);
-  private readonly _loading = signal<boolean>(false);
   private readonly _page    = signal<number>(1);
+  private readonly _retryTrigger = signal(0);
   readonly pageSize = 20;
 
+  private readonly transactions = resource<Transaction[], void>({
+    loader: async ({ abortSignal }) => {
+      if (environment.mockMode || !this.supabase.isConfigured) {
+        return MOCK_TRANSACTIONS;
+      }
+
+      const { data, error } = await this.supabase.client!
+        .from('transactions')
+        .select('*')
+        .order('date', { ascending: false })
+        .abortSignal(abortSignal);
+
+      if (error) throw error;
+
+      return data.map(this.mapRow);
+    },
+    defaultValue: [],
+  });
+
   readonly filter:  Signal<TransactionFilter> = this._filter.asReadonly();
-  readonly loading: Signal<boolean>           = this._loading.asReadonly();
+  readonly loading: Signal<boolean>           = this.transactions.isLoading;
   readonly page:    Signal<number>            = this._page.asReadonly();
+  readonly lastError: Signal<Error | undefined> = this.transactions.error;
+  readonly initialized: Signal<boolean>       = computed(() => this.transactions.status() === 'resolved');
 
   readonly filtered = computed(() => {
+    const all = this.transactions.value();
     const f = this._filter();
     const q = f.search.toLowerCase();
-    return this._all().filter(t => {
+    return all.filter(t => {
       if (q && !t.description.toLowerCase().includes(q) && !t.reference.toLowerCase().includes(q)) return false;
       if (f.status   !== 'all' && t.status   !== f.status)   return false;
       if (f.category !== 'all' && t.category !== f.category) return false;
@@ -38,7 +66,11 @@ export class TransactionService {
 
   readonly totalPages = computed(() => Math.max(1, Math.ceil(this.filtered().length / this.pageSize)));
 
-  readonly selected = computed(() => this._all().find(t => t.id === this._selId()) ?? null);
+  readonly selected = computed(() => {
+    const id = this._selId();
+    if (!id) return null;
+    return this.transactions.value().find(t => t.id === id) ?? null;
+  });
 
   readonly summary = computed(() => {
     const txns = this.filtered();
@@ -49,6 +81,10 @@ export class TransactionService {
     const byCategory = txns.reduce((acc,t) => { acc[t.category]=(acc[t.category]??0)+t.amount; return acc; }, {} as Record<string,number>);
     return { totalIn, totalOut, net: totalIn-totalOut, pending, failed, byCategory, count: txns.length };
   });
+
+  retry(): void {
+    this.transactions.reload();
+  }
 
   setFilter(partial: Partial<TransactionFilter>): void {
     this._filter.update(f => ({ ...f, ...partial }));
@@ -64,15 +100,69 @@ export class TransactionService {
 
   selectTransaction(id: string | null): void { this._selId.set(id); }
 
-  approveTransaction(id: string): void {
-    this._loading.set(true);
-    this._all.update(txns => txns.map(t => t.id===id ? { ...t, status: 'completed' } : t));
-    setTimeout(() => this._loading.set(false), 600);
+  async approveTransaction(id: string): Promise<void> {
+    // Save previous state for per row rollback
+    const previousTx = this.transactions.value().find(t => t.id === id);
+    if (!previousTx) return;
+
+    // Optimistic update, single row only
+    this.transactions.update(txns => txns.map(t => t.id === id ? { ...t, status: 'completed' as const } : t));
+
+    if (environment.mockMode || !this.supabase.isConfigured) {
+      await new Promise(r => setTimeout(r, 600));
+      return;
+    }
+
+    try {
+      const { error } = await this.supabase.client!
+        .from('transactions')
+        .update({ status: 'completed' })
+        .eq('id', id);
+
+      if (error) throw error;
+    } catch (e: any) {
+      // Per-row rollback, only revert this specific row, not the entire array
+      this.transactions.update(txns => txns.map(t => t.id === id ? previousTx : t));
+      this.toast.show(e.message || 'Failed to approve transaction', 'error');
+    }
   }
 
-  flagTransaction(id: string): void {
-    this._loading.set(true);
-    this._all.update(txns => txns.map(t => t.id===id ? { ...t, status: 'failed' } : t));
-    setTimeout(() => this._loading.set(false), 600);
+  async flagTransaction(id: string): Promise<void> {
+    const previousTx = this.transactions.value().find(t => t.id === id);
+    if (!previousTx) return;
+
+    this.transactions.update(txns => txns.map(t => t.id === id ? { ...t, status: 'failed' as const } : t));
+
+    if (environment.mockMode || !this.supabase.isConfigured) {
+      await new Promise(r => setTimeout(r, 600));
+      return;
+    }
+
+    try {
+      const { error } = await this.supabase.client!
+        .from('transactions')
+        .update({ status: 'failed' })
+        .eq('id', id);
+
+      if (error) throw error;
+    } catch (e: any) {
+      // Per row rollback
+      this.transactions.update(txns => txns.map(t => t.id === id ? previousTx : t));
+      this.toast.show(e.message || 'Failed to flag transaction', 'error');
+    }
+  }
+
+  private mapRow(row: any): Transaction {
+    return {
+      id: row.id,
+      date: new Date(row.date),
+      description: row.description,
+      amount: Number(row.amount),
+      type: row.type,
+      status: row.status,
+      category: row.category,
+      merchant: row.merchant,
+      reference: row.reference,
+    };
   }
 }

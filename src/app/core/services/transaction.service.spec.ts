@@ -1,15 +1,27 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
+import { ApplicationRef } from '@angular/core';
 import { TransactionService } from './transaction.service';
+import { SupabaseClientService } from './supabase-client.service';
+import { ToastService } from './toast.service';
 
 describe('TransactionService', () => {
   let service: TransactionService;
+  let appRef: ApplicationRef;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
+  beforeEach(async () => {
+    TestBed.configureTestingModule({
+      providers: [TransactionService, SupabaseClientService, ToastService]
+    });
     service = TestBed.inject(TransactionService);
+    appRef = TestBed.inject(ApplicationRef);
+    await appRef.whenStable();
   });
 
   it('should be created', () => expect(service).toBeTruthy());
+
+  it('should load mock data when mockMode is true', () => {
+    expect(service.filtered().length).toBeGreaterThan(0);
+  });
 
   it('should have default filter', () => {
     expect(service.filter().search).toBe('');
@@ -27,12 +39,16 @@ describe('TransactionService', () => {
 
   it('should filter by status', () => {
     service.setFilter({ status: 'completed' });
-    service.filtered().forEach(tx => expect(tx.status).toBe('completed'));
+    const filtered = service.filtered();
+    expect(filtered.length).toBeGreaterThan(0);
+    filtered.forEach(tx => expect(tx.status).toBe('completed'));
   });
 
   it('should filter by category', () => {
     service.setFilter({ category: 'purchase' });
-    service.filtered().forEach(tx => expect(tx.category).toBe('purchase'));
+    const filtered = service.filtered();
+    expect(filtered.length).toBeGreaterThan(0);
+    filtered.forEach(tx => expect(tx.category).toBe('purchase'));
   });
 
   it('should paginate results', () => {
@@ -59,5 +75,23 @@ describe('TransactionService', () => {
     const first = service.filtered()[0];
     service.selectTransaction(first.id);
     expect(service.selected()?.id).toBe(first.id);
+  });
+
+  it('should handle approve transaction in mock mode', async () => {
+    const pendingTx = service.filtered().find(t => t.status === 'pending');
+    if (pendingTx) {
+      await service.approveTransaction(pendingTx.id);
+      const updated = service.filtered().find(t => t.id === pendingTx.id);
+      expect(updated?.status).toBe('completed');
+    }
+  });
+
+  it('should handle flag transaction in mock mode', async () => {
+    const pendingTx = service.filtered().find(t => t.status === 'pending');
+    if (pendingTx) {
+      await service.flagTransaction(pendingTx.id);
+      const updated = service.filtered().find(t => t.id === pendingTx.id);
+      expect(updated?.status).toBe('failed');
+    }
   });
 });
