@@ -14,7 +14,6 @@ export class TransactionService {
   private readonly _filter  = signal<TransactionFilter>({ ...DEFAULT_FILTER });
   private readonly _selId   = signal<string | null>(null);
   private readonly _page    = signal<number>(1);
-  private readonly _retryTrigger = signal(0);
   readonly pageSize = 20;
 
   private readonly transactions = resource<Transaction[], void>({

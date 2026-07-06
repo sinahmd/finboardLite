@@ -1,6 +1,6 @@
 // src/app/features/market-rate/market-rate.service.ts
 import { Injectable, signal, computed, inject, OnDestroy, resource } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject, takeUntil, interval, firstValueFrom, catchError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -29,12 +29,15 @@ export class MarketRateService implements OnDestroy {
   private readonly _lastFetchTime = signal<number>(0);
 
   private readonly API_URL = environment.marketRateApiUrl;
+  private readonly headers = new HttpHeaders({
+    'Authorization': `Bearer ${environment.supabaseAnonKey}`,
+  });
 
   private readonly rateResource = resource<MarketRate, number>({
     params: () => this._tick(),
     loader: async ({ abortSignal }) => {
       const data = await firstValueFrom(
-        this.http.get<PricedbResponse>(this.API_URL).pipe(
+        this.http.get<PricedbResponse>(this.API_URL, { headers: this.headers }).pipe(
           catchError(err => {
             if (err.status === 404) {
               throw new Error('ارز پشتیبانی نمیشود');
@@ -75,7 +78,6 @@ export class MarketRateService implements OnDestroy {
 
   refresh(): void {
     this._tick.update(t => t + 1);
-    this.rateResource.reload();
   }
 
   ngOnDestroy(): void {

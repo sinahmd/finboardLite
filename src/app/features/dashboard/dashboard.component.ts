@@ -3,10 +3,11 @@ import { SummaryCardsComponent } from '../summary/summary-cards/summary-cards.co
 import { FilterBarComponent } from '../transactions/filter-bar/filter-bar.component';
 import { TransactionTableComponent } from '../transactions/transaction-table/transaction-table.component';
 import { ChartsPanelComponent } from '../charts/charts-panel.component';
+import { MarketRateWidgetComponent } from '../market-rate/market-rate-widget.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [SummaryCardsComponent, FilterBarComponent, TransactionTableComponent, ChartsPanelComponent],
+  imports: [SummaryCardsComponent, FilterBarComponent, TransactionTableComponent, ChartsPanelComponent, MarketRateWidgetComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
