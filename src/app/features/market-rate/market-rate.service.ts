@@ -34,7 +34,7 @@ export class MarketRateService implements OnDestroy {
     params: () => this._tick(),
     loader: async ({ abortSignal }) => {
       const data = await firstValueFrom(
-        this.http.get<PricedbResponse[]>(this.API_URL).pipe(
+        this.http.get<PricedbResponse>(this.API_URL).pipe(
           catchError(err => {
             if (err.status === 404) {
               throw new Error('ارز پشتیبانی نمیشود');
@@ -43,21 +43,17 @@ export class MarketRateService implements OnDestroy {
           })
         )
       );
-      if (Array.isArray(data) && data.length > 0) {
-        const item = data[0];
-        if (item.success && item.price) {
-          this._lastFetchTime.set(Date.now());
-          return {
-            price: item.price,
-            high: item.high,
-            low: item.low,
-            time: item.time,
-            priceInToman: Math.round(item.price / 10),
-          };
-        }
-        throw new Error('اطلاعات در دسترس نیست');
+      if (data?.success && data?.price) {
+        this._lastFetchTime.set(Date.now());
+        return {
+          price: data.price,
+          high: data.high,
+          low: data.low,
+          time: data.time,
+          priceInToman: Math.round(data.price / 10),
+        };
       }
-      throw new Error('اطلاعاتی به دست نیامد');
+      throw new Error('اطلاعات در دسترس نیست');
     },
   });
 
