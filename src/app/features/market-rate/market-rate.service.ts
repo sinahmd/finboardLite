@@ -5,9 +5,7 @@ import { Subject, takeUntil, interval, firstValueFrom, catchError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export interface MarketRate {
-  price: number;      // IRR
-  high: number;
-  low: number;
+  price: number;
   time: string;
   priceInToman: number;
 }
@@ -15,8 +13,6 @@ export interface MarketRate {
 interface PricedbResponse {
   success: boolean;
   price: number;
-  high: number;
-  low: number;
   time: string;
 }
 
@@ -50,8 +46,6 @@ export class MarketRateService implements OnDestroy {
         this._lastFetchTime.set(Date.now());
         return {
           price: data.price,
-          high: data.high,
-          low: data.low,
           time: data.time,
           priceInToman: Math.round(data.price / 10),
         };

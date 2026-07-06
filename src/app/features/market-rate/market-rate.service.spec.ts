@@ -33,8 +33,6 @@ describe('MarketRateService', () => {
     req.flush({
       success: true,
       price: 585000,
-      high: 590850,
-      low: 579150,
       time: '2026-07-06'
     });
 

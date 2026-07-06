@@ -24,10 +24,6 @@ import { toPersianNumber } from '../../shared/utils/persian-number';
           <span class="rate-widget__value">{{ formatToman(rate.priceInToman) }}</span>
           <span class="rate-widget__unit">تومان</span>
         </div>
-        <div class="rate-widget__range">
-          <span>بالا: {{ formatToman(rate.high / 10) }}</span>
-          <span>پایین: {{ formatToman(rate.low / 10) }}</span>
-        </div>
       }
     </div>
   `,
@@ -77,13 +73,6 @@ import { toPersianNumber } from '../../shared/utils/persian-number';
     }
     .rate-widget__unit {
       font-size: 14px;
-      color: var(--muted);
-    }
-    .rate-widget__range {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 12px;
-      font-size: 12px;
       color: var(--muted);
     }
   `]
