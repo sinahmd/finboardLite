@@ -16,11 +16,17 @@ import { toPersianNumber } from '../../shared/utils/persian-number';
       </div>
 
       @if (marketRate.isLoading() && !marketRate.rate()) {
-        <div class="rate-widget__loading">در حال بارگذاری...</div>
+        <div class="rate-widget__skeleton">
+          <div class="skeleton skeleton--line--lg" style="width: 140px;"></div>
+          <div class="skeleton skeleton--line--sm" style="width: 50px;"></div>
+        </div>
       } @else if (marketRate.error()) {
-        <div class="rate-widget__error">{{ marketRate.error() }}</div>
+        <div class="rate-widget__error">
+          <span>{{ marketRate.error() }}</span>
+          <button class="rate-widget__retry" (click)="marketRate.refresh()">تلاش مجدد</button>
+        </div>
       } @else if (marketRate.rate(); as rate) {
-        <div class="rate-widget__price">
+        <div class="rate-widget__price fade-in">
           <span class="rate-widget__value">{{ formatToman(rate.priceInToman) }}</span>
           <span class="rate-widget__unit">تومان</span>
         </div>
@@ -52,14 +58,35 @@ import { toPersianNumber } from '../../shared/utils/persian-number';
       padding: 2px 8px;
       border-radius: 4px;
     }
-    .rate-widget__loading,
-    .rate-widget__error {
-      text-align: center;
-      padding: 20px;
-      font-size: 14px;
+    .rate-widget__skeleton {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
     .rate-widget__error {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 12px;
+      text-align: center;
       color: var(--danger);
+      font-size: 13px;
+    }
+    .rate-widget__retry {
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--danger);
+      background: transparent;
+      color: var(--danger);
+      transition: background 0.15s;
+      font-family: inherit;
+    }
+    .rate-widget__retry:hover {
+      background: var(--danger-bg);
     }
     .rate-widget__price {
       display: flex;

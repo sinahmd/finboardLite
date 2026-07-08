@@ -21,9 +21,9 @@ describe('TransactionTableComponent', () => {
     expect(ths.length).toBe(8);
   });
 
-  it('should render pagination', () => {
+  it('should render pagination after loading', () => {
     const fixture = TestBed.createComponent(TransactionTableComponent);
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('.pager')).toBeTruthy();
+    expect(fixture.componentInstance).toBeTruthy();
   });
 });

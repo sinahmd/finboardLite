@@ -1,61 +1,82 @@
 <div class="tbl-wrap">
-  <table aria-label="تراکنش‌ها">
-    <thead>
-      <tr>
-        <th>تاریخ</th>
-        <th>مرجع</th>
-        <th>توضیحات</th>
-        <th>دسته‌بندی</th>
-        <th>نوع</th>
-        <th class="right">مبلغ</th>
-        <th>وضعیت</th>
-        <th>عملیات</th>
-      </tr>
-    </thead>
-    <tbody>
-      @if (svc.paginated().length === 0) {
-        <tr><td colspan="8" class="empty">تراکنشی با فیلترهای انتخابی یافت نشد.</td></tr>
-      }
-      @for (tx of svc.paginated(); track tx.id) {
-        <tr class="tbl-row" (click)="open(tx)">
-          <td class="mono small">{{ formatJalali(tx.date) }}</td>
-          <td class="mono small">{{ tx.reference }}</td>
-          <td>{{ tx.description }}</td>
-          <td><span class="chip">{{ tx.category | categoryLabel }}</span></td>
-          <td>
-            <span [class]="'type-badge ' + tx.type">
-              {{ tx.type === 'credit' ? '▲' : '▼' }} {{ tx.type === 'credit' ? 'واریز' : 'برداشت' }}
-            </span>
-          </td>
-          <td class="right mono" [class.credit]="tx.type==='credit'" [class.debit]="tx.type==='debit'">
-            {{ tx.amount | rial }}
-          </td>
-          <td>
-              <span class="badge" [class]="(tx.status | statusBadge).cssClass">{{ (tx.status | statusBadge).label }}</span>
-          </td>
-          <td (click)="$event.stopPropagation()">
-            @if (tx.status === 'pending') {
-              <button class="act approve" [disabled]="svc.loading()" (click)="approve(tx.id)">✓</button>
-              <button class="act flag"    [disabled]="svc.loading()" (click)="flag(tx.id)">✗</button>
-            }
-          </td>
+  @if (svc.lastError()) {
+    <app-error-state [message]="'خطا در بارگذاری تراکنش‌ها'" (retry)="svc.retry()" />
+  } @else {
+    <table aria-label="تراکنش‌ها">
+      <thead>
+        <tr>
+          <th>تاریخ</th>
+          <th>مرجع</th>
+          <th>توضیحات</th>
+          <th>دسته‌بندی</th>
+          <th>نوع</th>
+          <th class="right">مبلغ</th>
+          <th>وضعیت</th>
+          <th>عملیات</th>
         </tr>
-      }
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        @if (svc.loading()) {
+          @for (row of skeletonRows; track row) {
+            <tr class="skeleton-row">
+              <td><div class="skeleton skeleton--line" style="width:80px;"></div></td>
+              <td><div class="skeleton skeleton--line" style="width:60px;"></div></td>
+              <td><div class="skeleton skeleton--line" style="width:120px;"></div></td>
+              <td><div class="skeleton skeleton--line" style="width:70px;"></div></td>
+              <td><div class="skeleton skeleton--line" style="width:65px;"></div></td>
+              <td><div class="skeleton skeleton--line" style="width:90px;"></div></td>
+              <td><div class="skeleton skeleton--line" style="width:70px;"></div></td>
+              <td></td>
+            </tr>
+          }
+        } @else if (svc.paginated().length === 0) {
+          <tr><td colspan="8">
+            <app-empty-state icon="🔍" message="تراکنشی با فیلترهای انتخابی یافت نشد." />
+          </td></tr>
+        } @else {
+          @for (tx of svc.paginated(); track tx.id) {
+            <tr class="tbl-row fade-in" (click)="open(tx)">
+              <td class="mono small">{{ formatJalali(tx.date) }}</td>
+              <td class="mono small">{{ tx.reference }}</td>
+              <td>{{ tx.description }}</td>
+              <td><span class="chip">{{ tx.category | categoryLabel }}</span></td>
+              <td>
+                <span [class]="'type-badge ' + tx.type">
+                  {{ tx.type === 'credit' ? '▲' : '▼' }} {{ tx.type === 'credit' ? 'واریز' : 'برداشت' }}
+                </span>
+              </td>
+              <td class="right mono" [class.credit]="tx.type==='credit'" [class.debit]="tx.type==='debit'">
+                {{ tx.amount | rial }}
+              </td>
+              <td>
+                  <span class="badge" [class]="(tx.status | statusBadge).cssClass">{{ (tx.status | statusBadge).label }}</span>
+              </td>
+              <td (click)="$event.stopPropagation()">
+                @if (tx.status === 'pending') {
+                  <button class="act approve" [disabled]="svc.loading()" (click)="approve(tx.id)">✓</button>
+                  <button class="act flag"    [disabled]="svc.loading()" (click)="flag(tx.id)">✗</button>
+                }
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
 
-  <div class="pager">
-    
-    <div class="pager__btns">
-      <button [disabled]="svc.page()===1" (click)="svc.setPage(svc.page()-1)">‹</button>
-      @for (p of pageRange(); track p) {
-        <button [class.active]="p===svc.page()" (click)="svc.setPage(p)">{{ p | persianNumber }}</button>
-      }
-      <button [disabled]="svc.page()===svc.totalPages()" (click)="svc.setPage(svc.page()+1)">›</button>
-    </div>
+    @if (!svc.loading()) {
+      <div class="pager">
+        <div class="pager__btns">
+          <button [disabled]="svc.page()===1" (click)="svc.setPage(svc.page()-1)">‹</button>
+          @for (p of pageRange(); track p) {
+            <button [class.active]="p===svc.page()" (click)="svc.setPage(p)">{{ p | persianNumber }}</button>
+          }
+          <button [disabled]="svc.page()===svc.totalPages()" (click)="svc.setPage(svc.page()+1)">›</button>
+        </div>
 
-    <span class="pager__info">
-      صفحه {{ svc.page() | persianNumber }} از {{ svc.totalPages() | persianNumber }} · {{ svc.filtered().length | persianNumber }} مجموع
-    </span>
-  </div>
+        <span class="pager__info">
+          صفحه {{ svc.page() | persianNumber }} از {{ svc.totalPages() | persianNumber }} · {{ svc.filtered().length | persianNumber }} مجموع
+        </span>
+      </div>
+    }
+  }
 </div>

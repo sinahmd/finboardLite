@@ -8,10 +8,12 @@ import { CategoryLabelPipe } from '../../../shared/pipes/category-label.pipe';
 import { PersianNumberPipe } from '../../../shared/pipes/persian-number.pipe';
 import { Transaction } from '../../../core/models/transaction.model';
 import { formatJalaliDateTime } from '../../../shared/utils/jalali';
+import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+import { ErrorStateComponent } from '../../../shared/components/error-state/error-state.component';
 
 @Component({
   selector: 'app-transaction-table',
-  imports: [RialPipe, StatusBadgePipe, CategoryLabelPipe, PersianNumberPipe],
+  imports: [RialPipe, StatusBadgePipe, CategoryLabelPipe, PersianNumberPipe, EmptyStateComponent, ErrorStateComponent],
   templateUrl: './transaction-table.component.html',
   styleUrl: './transaction-table.component.scss',
 })
@@ -19,6 +21,7 @@ export class TransactionTableComponent {
   svc = inject(TransactionService);
   private router = inject(Router);
   formatJalali = formatJalaliDateTime;
+  skeletonRows = [1, 2, 3, 4, 5, 6, 7, 8];
 
   open(tx: Transaction): void {
     this.svc.selectTransaction(tx.id);

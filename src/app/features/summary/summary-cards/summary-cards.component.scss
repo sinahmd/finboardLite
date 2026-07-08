@@ -10,3 +10,4 @@
 .red    { border-color:var(--danger);  } .red    .card__value { color:var(--danger);  }
 .blue   { border-color:var(--primary); } .blue   .card__value { color:var(--primary); }
 .yellow { border-color:var(--warning); } .yellow .card__value { color:var(--warning); }
+.skeleton-card { pointer-events: none; }

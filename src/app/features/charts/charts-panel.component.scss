@@ -10,3 +10,42 @@
 .chart-card__sub { font-size: .7rem; color: var(--muted); }
 .chart-card__body { padding: 1rem 1.25rem 1.25rem; position: relative; height: 240px; overflow-y: auto; }
 .chart-card__body--donut { height: 260px; }
+
+.chart-skeleton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chart-skeleton__svg {
+  width: 100%;
+  height: 100%;
+}
+.chart-skeleton--donut {
+  align-items: center;
+  justify-content: center;
+}
+.chart-skeleton__bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 4px;
+}
+.chart-skeleton__bar-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: center;
+  justify-content: flex-end;
+}
+.chart-skeleton__hbars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+.chart-skeleton__hbar {
+  width: 100%;
+}

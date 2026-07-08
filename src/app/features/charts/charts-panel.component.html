@@ -4,45 +4,109 @@
     <span class="charts-panel__sub">بر اساس تراکنش‌های فیلتر شده</span>
   </div>
 
-  <div class="charts-grid">
-    <div class="chart-card chart-card--wide">
-      <div class="chart-card__head">
-        <span class="chart-card__title">جریان نقدی روزانه</span>
-        <span class="chart-card__sub">واریزی در مقابل برداشت — ۳۰ روز اخیر</span>
+  @if (error()) {
+    <app-error-state [message]="'خطا در بارگذاری نمودارها'" (retry)="retry()" />
+  } @else if (loading()) {
+    <div class="charts-grid">
+      <div class="chart-card chart-card--wide">
+        <div class="chart-card__head">
+          <div class="skeleton skeleton--line" style="width:120px;"></div>
+          <div class="skeleton skeleton--line--sm" style="width:200px;"></div>
+        </div>
+        <div class="chart-card__body chart-skeleton">
+          <svg class="chart-skeleton__svg" viewBox="0 0 600 180" preserveAspectRatio="none">
+            <polyline points="0,140 50,120 100,130 150,80 200,90 250,60 300,70 350,40 400,50 450,30 500,45 550,20 600,35"
+              fill="none" stroke="var(--border)" stroke-width="2" opacity="0.6"/>
+            <polyline points="0,150 50,145 100,140 150,130 200,135 250,120 300,125 350,110 400,115 450,100 500,105 550,90 600,95"
+              fill="none" stroke="var(--border)" stroke-width="2" opacity="0.4"/>
+          </svg>
+        </div>
       </div>
-      <div class="chart-card__body">
-        <app-cash-flow-chart />
-      </div>
-    </div>
 
-    <div class="chart-card chart-card--wide">
-      <div class="chart-card__head">
-        <span class="chart-card__title">حجم ماهانه</span>
-        <span class="chart-card__sub">واریز در مقابل برداشت — ۱۲ ماه اخیر</span>
+      <div class="chart-card chart-card--wide">
+        <div class="chart-card__head">
+          <div class="skeleton skeleton--line" style="width:100px;"></div>
+          <div class="skeleton skeleton--line--sm" style="width:180px;"></div>
+        </div>
+        <div class="chart-card__body chart-skeleton">
+          <div class="chart-skeleton__bars">
+            @for (i of [1,2,3,4,5,6,7,8,9,10,11,12]; track i) {
+              <div class="chart-skeleton__bar-group">
+                <div class="skeleton skeleton--rect" [style.width]="'100%'" [style.height]="(40 + i * 8) + 'px'"></div>
+                <div class="skeleton skeleton--rect" [style.width]="'100%'" [style.height]="(20 + i * 5) + 'px'"></div>
+              </div>
+            }
+          </div>
+        </div>
       </div>
-      <div class="chart-card__body">
-        <app-monthly-volume-chart />
-      </div>
-    </div>
 
-    <div class="chart-card">
-      <div class="chart-card__head">
-        <span class="chart-card__title">هزینه بر اساس دسته‌بندی</span>
-        <span class="chart-card__sub">فقط برداشت‌های تکمیل شده</span>
+      <div class="chart-card">
+        <div class="chart-card__head">
+          <div class="skeleton skeleton--line" style="width:140px;"></div>
+          <div class="skeleton skeleton--line--sm" style="width:120px;"></div>
+        </div>
+        <div class="chart-card__body chart-skeleton chart-skeleton--donut">
+          <div class="skeleton skeleton--circle" style="width:140px;height:140px;"></div>
+        </div>
       </div>
-      <div class="chart-card__body chart-card__body--donut">
-        <app-category-donut-chart />
-      </div>
-    </div>
 
-    <div class="chart-card">
-      <div class="chart-card__head">
-        <span class="chart-card__title">وضعیت تراکنش‌ها</span>
-        <span class="chart-card__sub">توزیع در میان تمام تراکنش‌های فیلتر شده</span>
-      </div>
-      <div class="chart-card__body">
-        <app-status-bar-chart />
+      <div class="chart-card">
+        <div class="chart-card__head">
+          <div class="skeleton skeleton--line" style="width:130px;"></div>
+          <div class="skeleton skeleton--line--sm" style="width:150px;"></div>
+        </div>
+        <div class="chart-card__body chart-skeleton">
+          <div class="chart-skeleton__hbars">
+            @for (i of [1,2,3,4]; track i) {
+              <div class="chart-skeleton__hbar">
+                <div class="skeleton skeleton--rect" [style.width]="(50 + i * 12) + '%'" style="height:24px;"></div>
+              </div>
+            }
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  } @else {
+    <div class="charts-grid fade-in">
+      <div class="chart-card chart-card--wide">
+        <div class="chart-card__head">
+          <span class="chart-card__title">جریان نقدی روزانه</span>
+          <span class="chart-card__sub">واریزی در مقابل برداشت — ۳۰ روز اخیر</span>
+        </div>
+        <div class="chart-card__body">
+          <app-cash-flow-chart />
+        </div>
+      </div>
+
+      <div class="chart-card chart-card--wide">
+        <div class="chart-card__head">
+          <span class="chart-card__title">حجم ماهانه</span>
+          <span class="chart-card__sub">واریز در مقابل برداشت — ۱۲ ماه اخیر</span>
+        </div>
+        <div class="chart-card__body">
+          <app-monthly-volume-chart />
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card__head">
+          <span class="chart-card__title">هزینه بر اساس دسته‌بندی</span>
+          <span class="chart-card__sub">فقط برداشت‌های تکمیل شده</span>
+        </div>
+        <div class="chart-card__body chart-card__body--donut">
+          <app-category-donut-chart />
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card__head">
+          <span class="chart-card__title">وضعیت تراکنش‌ها</span>
+          <span class="chart-card__sub">توزیع در میان تمام تراکنش‌های فیلتر شده</span>
+        </div>
+        <div class="chart-card__body">
+          <app-status-bar-chart />
+        </div>
+      </div>
+    </div>
+  }
 </div>
